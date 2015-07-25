@@ -62,6 +62,12 @@ function isDocumentNew(doc){
 function saveFunc(dpi) {
     app.activeDocument = docRef;
     duplicateImage(false);
+
+    //Some layers may have different effects such as "Outer Glow", "Bevel and Emboss", etc.
+    //Those effect will not be scaled when image resized
+    //So it's better to merge all layers before resizing:
+    flattenLayers(app.activeDocument);
+
     resizeActiveDoc(dpi);
 
     var path = docRef.path; 
@@ -85,6 +91,23 @@ function saveFunc(dpi) {
 
     // Close the document without saving
     activeDocument.close(SaveOptions.DONOTSAVECHANGES);
+}
+
+function flattenLayers(doc) {
+    try{
+        doc.mergeVisibleLayers();
+    }catch(e){
+        //It may cause error to merge layers if there is only one visible layer in the document
+        
+        // Create a new art layer at the top of the current document
+        doc.artLayers.add();
+
+        try {
+            doc.mergeVisibleLayers();
+        } catch(e) {
+            //do nothing
+        }
+    }
 }
 
 // Duplicate image. Merged shows if layers groups should be merged
