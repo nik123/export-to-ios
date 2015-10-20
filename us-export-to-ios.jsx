@@ -61,6 +61,9 @@ function isDocumentNew(doc){
 
 function saveFunc(dpi) {
     app.activeDocument = docRef;
+
+    var originHeight = app.activeDocument.height;
+    var originWidth = app.activeDocument.width;
     duplicateImage(false);
 
     //Some layers may have different effects such as "Outer Glow", "Bevel and Emboss", etc.
@@ -68,7 +71,7 @@ function saveFunc(dpi) {
     //So it's better to merge all layers before resizing:
     flattenLayers(app.activeDocument);
 
-    resizeActiveDoc(dpi);
+    resizeActiveDoc(dpi, originWidth, originHeight);
 
     var path = docRef.path; 
     var folder = Folder(path + '/' + docNameNoExt + '-assets/');
@@ -120,16 +123,16 @@ function duplicateImage(merged) {
     executeAction(cTID('Dplc'), desc1, DialogModes.NO);
 }
 
-function resizeActiveDoc(scale) {
+function resizeActiveDoc(scale, originWidth, originHeight) {
     // get a reference to the current (active) document and store it in a variable named "doc"
     doc = app.activeDocument;
 
     // change the color mode to RGB.  Important for resizing GIFs with indexed colors, to get better results
     doc.changeMode(ChangeMode.RGB);  
 
-    // these are our values for the end result width and height (in pixels) of our image
-    var newHeight = Math.floor(app.activeDocument.height / scaleFactors[scale]);
-    var newWidth = Math.floor(app.activeDocument.width / scaleFactors[scale]);
+    // these are our values for the end result width and height (in pixels) of our image 
+    var newHeight = Math.round(originHeight / scaleFactors[scale]);
+    var newWidth = Math.round(originWidth / scaleFactors[scale]);
 
     // do the resizing.  if height > width (portrait-mode) resize based on height.  otherwise, resize based on width
     if (doc.height > doc.width) {
