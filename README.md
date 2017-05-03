@@ -9,4 +9,4 @@ The script works almost the same as the original one (https://github.com/Uncorke
 ## Installation
 1. Download the script here
 
-2. Move the .jsx file to your Photoshop scripts folder. If you don't know where that is, you can easily find out by following the instructions <a href="http://www.outbackphoto.net/news/2013/2/17/free-script-where-is-my-photoshop-scripts-folder.html" target="_blank">on this quick post</a>.
+2. Move the .jsx file to your Photoshop scripts folder. On MacOS scripts folder should be located at "/Applications/Adobe Photoshop CS6/Presets/Scripts"
